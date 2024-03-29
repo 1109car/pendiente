@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Chat</title>
+    <style>
+      .form{
+        width: 40%;
+        height: 60vh;
+        border: solid black 2px;
+      }
+    </style>
+      
+</head>
+<body>
+    <div class="contenedor">
+     
+      <form class="form">
+        <ul class="mensajess"></ul>
+        <input class="mensaje" type="text" placeholder="escribe" autocomplete="off" name="message">
+        <button  type="submit">Enviar</button>
+      </form>
+    </div>
+    <script type="module">
+    
+      import {io} from "http://cdn.socket.io/4.3.2/socket.io.esm.min.js"
+ 
+      const socket = io()
+      const contenedor = document.querySelector(".form")
+      const inpuut = document.querySelector(".mensaje")
+      const mensajess = document.querySelector(".mensajess")
+
+      socket.on('chat message',(msg)=>{
+        const item = `<li>${msg}</li>`
+        mensajess.insertAdjacentHTML("beforeend",item)
+      })
+ 
+      contenedor.addEventListener('submit',(e)=>{
+       e.preventDefault()
+
+       if(inpuut.value){
+         socket.emit('chat message', inpuut.value)
+         inpuut.value =""
+       }
+      })
+ 
+     </script>
+</body>
+</html>
